@@ -1,0 +1,101 @@
+On peut créer un nouveau thread depuis n’importe quel thread du programme avec la fonction pthread_create, dont le prototype est le suivant :
+
+int pthread_create(pthread_t *restrict thread,
+                          const pthread_attr_t *restrict attr,
+                          void *(*start_routine)(void *),
+                          void *restrict arg);
+
+thread : un pointeur vers une variable de type pthread_t pour stocker l’identifiant du thread qu’on va créer.
+attr : un argument qui permet de changer les attributs par défaut du nouveau thread lors de sa création. Ceci va au-delà de la portée de cet article, et en général il suffira d’indiquer NULL ici.
+start_routine : la fonction par laquelle le thread commence son exécution. Cette fonction doit avoir pour prototype void *nom_de_fonction_au_choix(void *arg);. Lorsque le thread arrive à la fin de cette fonction, il aura terminé toutes ses tâches.
+arg : le pointeur vers un argument à transmettre à la fonction start_routine du thread. Si l’on souhaite passer plusieurs paramètres à cette fonction, il n’y a pas d’autre choix que de lui renseigner ici un pointeur vers une structure de données.
+
+Renvoie 0 si tout s'est bien passe, ou un message d'erreur
+
+	-> Creer autant de thread qu'il n'y a de philo
+
+---
+
+Pour bloquer l’exécution d’un thread en attendant qu’un autre thread se termine :
+
+int pthread_join(pthread_t thread, void **retval);
+
+thread : l’identifiant du thread qu’on attend. Le thread spécifié ici doit être joignable (c’est à dire non détaché - voir ci-dessous).
+retval : un pointeur vers une variable qui peut contenir la valeur de retour de la fonction routine du thread (la fonction start_routine qu’on a fournie lors de la création du thread). Si on n’a pas besoin de cette valeur, on peut simplement renseigner NULL.
+
+Renvoie 0 si tout s'est bien passe, ou un message d'erreur
+
+	-> va falloir boucler pour attendre tout les thread qui on ete cree
+
+---
+
+On remarquera qu’on ne peut qu’attendre la fin d’un thread spécifique. Il n’y a aucun moyen d’attendre le premier thread qui se termine sans s’occuper de son identifiant, comme le fait la fonction wait avec les processus fils.
+
+Mais dans certains cas, il est possible et préférable de ne pas s’occuper d’attendre la fin de certains threads. On peut alors détacher le thread pour indiquer au système qu’il peut récupérer ses ressources dès que le thread termine. Pour cela, on utilise la fonction pthread_detach (généralement juste après la création du thread) :
+
+int pthread_detach(pthread_t thread);
+
+Ici, on a simplement à renseigner l’identifiant du thread. On reçoit en retour 0 si le détachement s’est bien passé, ou un code erreur. Après l’avoir détaché, les autres threads n’auront ni la possibilité de tuer ce thread ni celle d’attendre de le récupérer avec pthread_join
+
+---
+
+Qu’est-ce qu’un mutex ?
+
+Un mutex (abrégé de " mut ual ex clusion" en anglais, c’est à dire “exclusion mutuelle”), c’est une primitive de synchronisation. C’est un essentiellement verrou qui permet de réguler l’accès aux données et empêcher que les ressources partagées soient utilisées en même temps.
+
+On peut penser à un mutex comme au verrou de la porte des toilettes. Un thread vient le verrouiller pour indiquer que les toilettes sont occupées. Les autres threads devront alors attendre patiemment que la porte soit déverrouillée avant de pouvoir accéder aux toilettes à leur tour.
+Déclarer un mutex
+
+Avec le header <pthread.h>, on peut déclarer une variable de type mutex comme ceci :
+
+pthread_mutex_t    mutex;
+
+Mais avant de pouvoir l’utiliser, on doit d’abord l’initialiser avec la fonction pthread_mutex_init qui a le prototype suivant :
+
+int pthread_mutex_init(pthread_mutex_t *mutex,
+                        const pthread_mutexattr_t *mutexattr);
+
+On doit lui fournir deux paramètres :
+
+    mutex : le pointeur vers une variable de type pthread_mutex_t, le mutex qu’on souhaite initialiser.
+    mutexattr : un pointeur vers des attributs spécifiques pour le mutex
+
+La fonction pthread_mutex_init renvoie toujours 0.
+
+Verrouiller et déverrouiller un mutex
+
+Ensuite, pour verrouiller et déverrouiller notre mutex, il nous faudra deux autres fonctions qui ont les prototypes suivants :
+
+int pthread_mutex_lock(pthread_mutex_t *mutex); // Verrouillage
+int pthread_mutex_unlock(pthread_mutex_t *mutex); // Déverrouillage
+
+
+Si le mutex est déverrouillé, pthread_mutex_lock le verrouille et le thread appelant devient le propriétaire de ce mutex. La fonction prend alors fin immédiatement. Par contre, si le mutex est déjà verrouillé par un autre thread, pthread_mutex_lock suspend le thread appelant jusqu’à ce que le mutex soit déverrouillé.
+
+Le fonction pthread_mutex_unlock, quand à elle, déverrouille un mutex. Ce mutex est supposé verrouillé par le thread appelant, et la fonction le réinitialise toujours à l’état déverrouillé. Attention, cette fonction ne vérifie pas si le mutex est en effet verrouillé et que le thread appelant est celui qui possède ce verrou : il est donc possible qu’un mutex soit déverrouillé par un thread autre que celui qui l’a verrouillé. Il faut donc faire particulièrement attention à la disposition des pthread_mutex_lock et pthread_mutex_unlock dans notre code pou éviter des erreurs du type “lock order violation”.
+
+Ces deux fonctions renvoient 0 en cas de succès et un code erreur en cas d’erreur.
+
+Détruire un mutex
+
+Quand on n’a plus besoin d’un mutex, il nous faut le détruire avec la fonction pthread_mutex_destroy suivante :
+
+int pthread_mutex_destroy(pthread_mutex_t *mutex);
+
+Cette fonction détruit un mutex déverrouillé, libérant les ressources qu’il détient. Dans l’implémentation LinuxThreads des threads POSIX, aucune ressource ne peut être associé à un mutex. Dans ce cas, pthread_mutex_destroy ne fait rien si ce n’est vérifier que le mutex n’est pas verrouillé.
+
+---
+
+Astuces pour tester les threads d’un programme
+
+L’important quand on teste un programme qui fait appel à de multiples threads, c’est de tenter chaque test plusieurs fois de suite. En effet, il arrive souvent que des erreurs de synchronisation ne soient pas détectables lors du premier, du deuxième ou même du troisième résultat. Cela dépend du choix d’ordonnancement du système d’exploitation lors de cette exécution des threads. En tentant le même test de façon répétée, il arrive régulièrement d’avoir des résultats très différents les uns des autres.
+
+Il y a quelques outils qui peuvent nous aider à détecter les erreurs liés aux threads comme les situations de compétition ( data race), les possibilités d’interblocage ( deadlock) et les erreurs d’acquisition de mutex ( lock order violation) :
+
+    Le drapeau -fsanitize=thread -g qu’on ajoute au moment de la compilation. L’option -g permet d’afficher les numéros de ligne qui ont produit l’erreur.
+    L’outil de détection d’erreurs de thread Helgrind avec lequel on peut exécuter notre programme, comme ceci : valgrind --tool=helgrind ./programme.
+    L’outil de détection d’erreurs de threads DRD, qu’on lance aussi au moment de l’exécution comme ceci : valgrind --tool=drd ./programme.
+
+Attention, valgrind et -fsanitize=thread ne s’entendent pas du tout et ne doivent pas s’utiliser ensemble !
+
+Comme toujours, il ne faut pas non plus oublier de vérifier les fuites de mémoire avec -fsanitize=address et valgrind tout court !
