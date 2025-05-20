@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:51:20 by sberete           #+#    #+#             */
-/*   Updated: 2025/05/19 17:30:42 by sberete          ###   ########.fr       */
+/*   Updated: 2025/05/20 21:37:34 by sxrimu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,15 @@ void	*routine(void *arg)
 	tid = pthread_self();
 	while (i < 100)
 	{
-		pthread_mutex_lock(&data->philo->fork);
-		data->count++;
+		pthread_mutex_lock(&data->philo->fork); // has take fork
+		data->count++; // is eating
 		pthread_mutex_unlock(&data->philo->fork);
 		i++;
 	}
 	// printf("%sThread [%ld]: Le plus grand ennui c'est d'exister sans vivre.%s\n",
 	// 	YELLOW, tid, NC);
-	printf("%sThread [%d] j'ai termine%s\n",
-		YELLOW, data->philo[i].name, NC);
+	printf("%sThread [%ld] j'ai termine%s\n",
+		YELLOW, tid, NC);
 	return (NULL);
 }
 
