@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:18:20 by sberete           #+#    #+#             */
-/*   Updated: 2025/05/24 14:20:47 by sberete          ###   ########.fr       */
+/*   Updated: 2025/05/24 18:13:19 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ typedef struct s_philo
 typedef struct s_data
 {
 	int				number_of_philosophers;
-	int count;
 	t_philo			*philo;
 }					t_data;
 
@@ -53,5 +52,6 @@ long				ft_atol(char *s);
 bool				valid_number(char *str);
 bool				parsing(int argc, char **argv);
 t_data				init(int argc, char **argv);
+long				actual_time(void);
 
 #endif

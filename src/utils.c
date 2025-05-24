@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:51:37 by sberete           #+#    #+#             */
-/*   Updated: 2025/05/16 16:51:38 by sberete          ###   ########.fr       */
+/*   Updated: 2025/05/24 20:32:14 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,12 @@ bool	valid_number(char *str)
 		i++;
 	}
 	return (true);
+}
+
+long	actual_time(void)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
