@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:18:20 by sberete           #+#    #+#             */
-/*   Updated: 2025/05/18 19:08:23 by sberete          ###   ########.fr       */
+/*   Updated: 2025/05/24 14:20:47 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@
 typedef struct s_philo
 {
 	pthread_t		id;
-	pthread_mutex_t	fork;
+	pthread_mutex_t	right_fork;
+	pthread_mutex_t	*left_fork;
 	int				name;
 	int				time_to_eat;
 	int				time_to_die;

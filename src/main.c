@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:51:20 by sberete           #+#    #+#             */
-/*   Updated: 2025/05/20 21:37:34 by sxrimu           ###   ########.fr       */
+/*   Updated: 2025/05/24 14:41:21 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,12 @@ void	*routine(void *arg)
 
 	i = 0;
 	tid = pthread_self();
-	while (i < 100)
+	while (i < data->number_of_philosophers)
 	{
-		pthread_mutex_lock(&data->philo->fork); // has take fork
-		data->count++; // is eating
-		pthread_mutex_unlock(&data->philo->fork);
+		if (i == 0)
+			data->philo[i].left_fork = &data->philo[data->number_of_philosophers - 1].right_fork;
+		else
+			data->philo[i].left_fork = &data->philo[i - 1].right_fork;
 		i++;
 	}
 	// printf("%sThread [%ld]: Le plus grand ennui c'est d'exister sans vivre.%s\n",
@@ -59,7 +60,7 @@ void	create_thread(t_data *data)
 	printf("%sCount doit terminer a [%d]%s\n", RED,data->number_of_philosophers * 100, NC);
 	while (i < data->number_of_philosophers)
 	{
-		pthread_mutex_init(&data->philo[i].fork, NULL);
+		pthread_mutex_init(&data->philo[i].right_fork, NULL);
 		pthread_create(&data->philo[i].id, NULL, routine, data);
 		data->philo[i].name = i + 1;
 		printf("Main: Creation du thread [%d] id : [%ld]\n",
@@ -70,7 +71,7 @@ void	create_thread(t_data *data)
 	while (i < data->number_of_philosophers)
 	{
 		pthread_join(data->philo[i].id, NULL);
-		pthread_mutex_destroy(&data->philo[i].fork);
+		pthread_mutex_destroy(&data->philo[i].right_fork);
 		printf("Main: Union du thread [%d] [%ld]\n", data->philo[i].name,
 			data->philo[i].id);
 		i++;
