@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:51:23 by sberete           #+#    #+#             */
-/*   Updated: 2025/05/24 19:38:11 by sberete          ###   ########.fr       */
+/*   Updated: 2025/05/25 22:45:59 by sxrimu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,19 @@ t_data	init(int argc, char **argv)
 	data.philo = malloc(sizeof(t_philo) * data.number_of_philosophers);
 	if (!data.philo)
 		exit(0);
-	data.philo->time_to_die = ft_atol(argv[2]);
-	data.philo->time_to_eat = ft_atol(argv[3]);
-	data.philo->time_to_sleep = ft_atol(argv[4]);
-	if (argc == 6)
-		data.philo->must_eat = ft_atol(argv[5]);
 	i = 0;
+	pthread_mutex_init(&data.print_lock, NULL);
 	while (i < data.number_of_philosophers)
 	{
 		pthread_mutex_init(&data.philo[i].right_fork, NULL);
 		data.philo[i].name = i + 1;
+		data.philo[i].time_to_die = ft_atol(argv[2]);
+		data.philo[i].time_to_eat = ft_atol(argv[3]);
+		data.philo[i].time_to_sleep = ft_atol(argv[4]);
+		if (argc == 6)
+			data.philo[i].must_eat = ft_atol(argv[5]);
+		else
+			data.philo[i].must_eat = -1;
 		i++;
 	}
 	return (data);

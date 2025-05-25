@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:18:20 by sberete           #+#    #+#             */
-/*   Updated: 2025/05/24 18:13:19 by sberete          ###   ########.fr       */
+/*   Updated: 2025/05/25 23:07:24 by sxrimu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_philo
 	pthread_t		id;
 	pthread_mutex_t	right_fork;
 	pthread_mutex_t	*left_fork;
+	pthread_mutex_t *print_lock;
 	int				name;
 	int				time_to_eat;
 	int				time_to_die;
@@ -45,10 +46,11 @@ typedef struct s_philo
 typedef struct s_data
 {
 	int				number_of_philosophers;
+	pthread_mutex_t print_lock;
 	t_philo			*philo;
 }					t_data;
 
-long				ft_atol(char *s);
+long				ft_atol(char *str);
 bool				valid_number(char *str);
 bool				parsing(int argc, char **argv);
 t_data				init(int argc, char **argv);
