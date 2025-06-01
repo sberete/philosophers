@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:51:23 by sberete           #+#    #+#             */
-/*   Updated: 2025/05/28 19:37:19 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/01 20:17:31 by sxrimu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,31 +29,38 @@ bool	parsing(t_data data, int argc, char **argv)
 	}
 	return (true);
 }
-
-t_data	init(int argc, char **argv)
+static void philo_init(t_data *data, int argc, char **argv)
 {
-	t_data	data;
-	int		i;
+	int i;
 
-	memset(&data, 0, sizeof(t_data));
-	data.number_of_philosophers = ft_atol(argv[1]);
-	data.philo = malloc(sizeof(t_philo) * data.number_of_philosophers);
-	if (!data.philo)
-		exit(0);
 	i = 0;
-	pthread_mutex_init(&data.print_lock, NULL);
-	while (i < data.number_of_philosophers)
+	while (i < data->number_of_philosophers)
 	{
-		pthread_mutex_init(&data.philo[i].right_fork, NULL);
-		data.philo[i].name = i + 1;
-		data.philo[i].time_to_die = ft_atol(argv[2]);
-		data.philo[i].time_to_eat = ft_atol(argv[3]);
-		data.philo[i].time_to_sleep = ft_atol(argv[4]);
+		pthread_mutex_init(&data->philo[i].right_fork, NULL);
+		pthread_mutex_init(&data->philo[i].meal_eaten_lock, NULL);
+		data->philo[i].data = data;
+		data->philo[i].name = i + 1;
+		data->philo[i].time_to_die = ft_atol(argv[2]);
+		data->philo[i].time_to_eat = ft_atol(argv[3]);
+		data->philo[i].time_to_sleep = ft_atol(argv[4]);
 		if (argc == 6)
-			data.philo[i].must_eat = ft_atol(argv[5]);
+			data->philo[i].must_eat = ft_atol(argv[5]);
 		else
-			data.philo[i].must_eat = -1;
+			data->philo[i].must_eat = -1;
 		i++;
 	}
-	return (data);
+}
+
+bool	init(t_data *data, int argc, char **argv)
+{
+	memset(data, 0, sizeof(t_data));
+	data->number_of_philosophers = ft_atol(argv[1]);
+	data->philo = malloc(sizeof(t_philo) * data->number_of_philosophers);
+	if (!data->philo)
+		return (false);
+	pthread_mutex_init(&data->print_lock, NULL);
+	pthread_mutex_init(&data->someone_died_lock, NULL);
+	data->start_time = actual_time();
+	philo_init(data, argc, argv);
+	return (true);
 }

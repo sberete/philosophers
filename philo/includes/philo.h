@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:18:20 by sberete           #+#    #+#             */
-/*   Updated: 2025/05/28 19:38:16 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/01 21:58:30 by sxrimu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,26 +24,32 @@
 
 typedef struct s_philo
 {
-	pthread_mutex_t	*print_lock;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	right_fork;
 	pthread_t		id;
 	int				time_to_sleep;
 	int				time_to_eat;
 	int				time_to_die;
+	pthread_mutex_t	meal_eaten_lock;
+	int				meal_eaten;
+	// long			last_meal;
 	int				must_eat;
 	int				name;
+	struct s_data	*data;
 }					t_philo;
 
 typedef struct s_data
 {
-	int				number_of_philosophers;
 	pthread_mutex_t	print_lock;
+	int				number_of_philosophers;
+	pthread_mutex_t	someone_died_lock;
+	bool			someone_died;
+	long			start_time;
 	t_philo			*philo;
 }					t_data;
 
 bool				parsing(t_data data, int argc, char **argv);
-t_data				init(int argc, char **argv);
+bool				init(t_data *data, int argc, char **argv);
 
 bool				valid_number(char *str);
 long				ft_atol(char *str);

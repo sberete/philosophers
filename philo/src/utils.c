@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:51:37 by sberete           #+#    #+#             */
-/*   Updated: 2025/05/28 19:38:08 by sberete          ###   ########.fr       */
+/*   Updated: 2025/05/30 23:06:24 by sxrimu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,5 @@ long	actual_time(void)
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	return (((tv.tv_sec - tv.tv_sec) * 1000) + ((tv.tv_usec - tv.tv_usec)
-			/ 1000));
+	return ((tv.tv_sec  * 1000) + (tv.tv_usec / 1000));
 }

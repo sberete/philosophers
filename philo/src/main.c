@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:51:20 by sberete           #+#    #+#             */
-/*   Updated: 2025/05/28 17:36:40 by sberete          ###   ########.fr       */
+/*   Updated: 2025/05/31 16:31:46 by sxrimu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,11 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 	
-	data = init(argc, argv);
-	if (parsing(data, argc, argv))
-		philo_routine(&data);
-	else
+	if (!init(&data, argc, argv) || !parsing(data, argc, argv))
 	{
-		clean_philo(&data);
+		free(data.philo);
 		printf("Error\n");
+		return 1;
 	}
+	philo_routine(&data);
 }
