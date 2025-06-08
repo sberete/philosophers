@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 17:05:53 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/01 20:03:34 by sxrimu           ###   ########.fr       */
+/*   Updated: 2025/06/05 20:12:55 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	clean_philo(t_data *data)
 	{
 		pthread_mutex_destroy(&data->philo[i].right_fork);
 		pthread_mutex_destroy(&data->philo[i].meal_eaten_lock);
+		pthread_mutex_destroy(&data->philo[i].last_meal_lock);
 		i++;
 	}
 	pthread_mutex_destroy(&data->print_lock);

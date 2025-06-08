@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:51:37 by sberete           #+#    #+#             */
-/*   Updated: 2025/05/30 23:06:24 by sxrimu           ###   ########.fr       */
+/*   Updated: 2025/06/08 22:23:20 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,23 @@ long	actual_time(void)
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec  * 1000) + (tv.tv_usec / 1000));
+	return ((tv.tv_sec * 1000L) + (tv.tv_usec / 1000));
+}
+
+void	ft_sleep(long ms, t_data *data)
+{
+	long	start;
+
+	start = actual_time();
+	while ((actual_time() - start) < ms)
+	{
+		pthread_mutex_lock(&data->someone_died_lock);
+		if (data->someone_died)
+		{
+			pthread_mutex_unlock(&data->someone_died_lock);
+			break ;
+		}
+		pthread_mutex_unlock(&data->someone_died_lock);
+		usleep(100);
+	}
 }

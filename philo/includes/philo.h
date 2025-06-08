@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:18:20 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/01 21:58:30 by sxrimu           ###   ########.fr       */
+/*   Updated: 2025/06/05 20:34:06 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ typedef struct s_philo
 	int				time_to_die;
 	pthread_mutex_t	meal_eaten_lock;
 	int				meal_eaten;
-	// long			last_meal;
+	pthread_mutex_t	last_meal_lock;
+	long			last_meal;
 	int				must_eat;
 	int				name;
 	struct s_data	*data;
@@ -54,6 +55,8 @@ bool				init(t_data *data, int argc, char **argv);
 bool				valid_number(char *str);
 long				ft_atol(char *str);
 long				actual_time(void);
+void				ft_sleep(long ms, t_data *data);
+void				*monitor(void *arg);
 
 void				philo_routine(t_data *data);
 
