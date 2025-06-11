@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:51:37 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/08 22:23:20 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/10 21:03:59 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,15 @@ void	ft_sleep(long ms, t_data *data)
 		pthread_mutex_unlock(&data->someone_died_lock);
 		usleep(100);
 	}
+}
+
+void	print_action(t_philo *philo, char *action)
+{
+	pthread_mutex_lock(&philo->data->print_lock);
+	pthread_mutex_lock(&philo->data->someone_died_lock);
+	if (!philo->data->someone_died)
+		printf("%ld %d %s\n", actual_time() - philo->data->start_time,
+			philo->name, action);
+	pthread_mutex_unlock(&philo->data->someone_died_lock);
+	pthread_mutex_unlock(&philo->data->print_lock);
 }

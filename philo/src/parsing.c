@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:51:23 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/05 20:52:46 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/10 20:45:35 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ bool	parsing(t_data data, int argc, char **argv)
 
 	if (argc < 5 || argc > 6)
 		return (false);
-	if (data.number_of_philosophers > 200)
+	if (data.number_of_philosophers > 200 || data.philo->time_to_die < 60
+		|| data.philo->time_to_sleep < 60 || data.philo->time_to_eat < 60)
 		return (false);
 	i = 1;
 	while (argv[i])
@@ -63,6 +64,8 @@ bool	init(t_data *data, int argc, char **argv)
 		return (false);
 	pthread_mutex_init(&data->print_lock, NULL);
 	pthread_mutex_init(&data->someone_died_lock, NULL);
+	pthread_mutex_init(&data->finish_lock, NULL);
+	data->philos_finished = 0;
 	data->start_time = actual_time();
 	philo_init(data, argc, argv);
 	return (true);
