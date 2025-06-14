@@ -1,26 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 16:51:20 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/11 19:38:39 by sberete          ###   ########.fr       */
+/*   Created: 2025/05/16 16:51:23 by sberete           #+#    #+#             */
+/*   Updated: 2025/06/11 20:10:01 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-int	main(int argc, char **argv)
+bool	parsing(t_data data, int argc, char **argv)
 {
-	t_data	data;
+	int	i;
 
-	if (!data_init(&data, argc, argv) || !parsing(data, argc, argv))
+	if (argc < 5 || argc > 6)
+		return (false);
+	if (data.number_of_philosophers > 200 || data.philo->time_to_die < 60
+		|| data.philo->time_to_sleep < 60 || data.philo->time_to_eat < 60)
+		return (false);
+	i = 1;
+	while (argv[i])
 	{
-		free(data.philo);
-		printf("Error\n");
-		return (1);
+		if (valid_number(argv[i]) == false)
+			return (false);
+		i++;
 	}
-	philo_routine(&data);
+	return (true);
 }

@@ -1,20 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 17:18:20 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/11 20:00:12 by sberete          ###   ########.fr       */
+/*   Created: 2025/06/11 20:42:19 by sberete           #+#    #+#             */
+/*   Updated: 2025/06/12 17:37:13 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILO_BONUS_H
+# define PHILO_BONUS_H
 
 # include <limits.h>
 # include <pthread.h>
+# include <semaphore.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -24,10 +25,6 @@
 
 typedef struct s_philo
 {
-	pthread_mutex_t	meal_eaten_lock;
-	pthread_mutex_t	last_meal_lock;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	right_fork;
 	pthread_t		id;
 	int				time_to_sleep;
 	int				time_to_eat;
@@ -41,9 +38,7 @@ typedef struct s_philo
 
 typedef struct s_data
 {
-	pthread_mutex_t	someone_died_lock;
-	pthread_mutex_t	finish_lock;
-	pthread_mutex_t	print_lock;
+    sem_t           print_lock;
 	int				number_of_philosophers;
 	int				philos_finished;
 	bool			someone_died;
@@ -51,20 +46,7 @@ typedef struct s_data
 	t_philo			*philo;
 }					t_data;
 
-bool				parsing(t_data data, int argc, char **argv);
-bool				data_init(t_data *data, int argc, char **argv);
-
-bool				valid_number(char *str);
-long				ft_atol(char *str);
-long				actual_time(void);
-void				ft_sleep(long ms, t_data *data);
-void				*monitor(void *arg);
-void				*routine(void *arg);
-
-void				philo_routine(t_data *data);
-void				print_action(t_philo *philo, char *action);
-bool				single_philo(t_philo *philo);
-
-void				clean_philo(t_data *data);
+bool	data_init(t_data *data, int argc, char **argv);
+bool	parsing(t_data data, int argc, char **argv);
 
 #endif
