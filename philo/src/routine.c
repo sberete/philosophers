@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 21:03:04 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/11 19:59:48 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/16 22:45:47 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	fork_release(t_philo *philo)
 	}
 }
 
-static int	check_death(t_philo *philo)
+static int	has_someone_died(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->data->someone_died_lock);
 	if (philo->data->someone_died)
@@ -56,9 +56,9 @@ static int	check_death(t_philo *philo)
 	return (0);
 }
 
-static bool	eating_time(t_philo *philo)
+static bool	handle_eating(t_philo *philo)
 {
-	if (check_death(philo) == 1)
+	if (has_someone_died(philo) == 1)
 	{
 		fork_release(philo);
 		return (true);
@@ -89,21 +89,21 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (single_philo(philo))
+	if (handle_single_philosopher(philo))
 		return (NULL);
 	if (philo->name % 2 == 0)
 		usleep(100);
 	while (true)
 	{
-		if (check_death(philo) == 1)
+		if (has_someone_died(philo) == 1)
 			break ;
 		holding_forks(philo);
-		if (eating_time(philo))
+		if (handle_eating(philo))
 			break ;
 		ft_sleep(philo->time_to_eat, philo->data);
 		fork_release(philo);
 		print_action(philo, "is sleeping");
-		if (check_death(philo) == 1)
+		if (has_someone_died(philo) == 1)
 			break ;
 		ft_sleep(philo->time_to_sleep, philo->data);
 		print_action(philo, "is thinking");

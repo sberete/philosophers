@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 20:33:41 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/11 19:30:02 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/16 22:36:09 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	print_death(t_philo *philo)
 	pthread_mutex_unlock(&philo->data->print_lock);
 }
 
-static bool	a(t_data *data)
+static bool	have_all_philosophers_finished(t_data *data)
 {
 	pthread_mutex_lock(&data->finish_lock);
 	if (data->philos_finished == data->number_of_philosophers)
@@ -32,7 +32,7 @@ static bool	a(t_data *data)
 	return (false);
 }
 
-static void	b(t_data *data)
+static void	mark_philosopher_as_dead(t_data *data)
 {
 	pthread_mutex_lock(&data->someone_died_lock);
 	data->someone_died = true;
@@ -48,7 +48,7 @@ void	*monitor(void *arg)
 	data = (t_data *)arg;
 	while (true)
 	{
-		if (a(data))
+		if (have_all_philosophers_finished(data))
 			return (NULL);
 		i = 0;
 		while (i < data->number_of_philosophers)
@@ -58,7 +58,7 @@ void	*monitor(void *arg)
 			pthread_mutex_unlock(&data->philo[i].last_meal_lock);
 			if (last_meal_time > data->philo[i].time_to_die)
 			{
-				b(data);
+				mark_philosopher_as_dead(data);
 				print_death(&data->philo[i]);
 				return (NULL);
 			}

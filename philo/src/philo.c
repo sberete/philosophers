@@ -6,13 +6,13 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:22:16 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/10 21:35:54 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/16 22:46:42 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	philo_routine(t_data *data)
+void	run_philosophers_simulation(t_data *data)
 {
 	pthread_t	monitoring;
 	int			i;
@@ -33,5 +33,5 @@ void	philo_routine(t_data *data)
 	while (i < data->number_of_philosophers)
 		pthread_join(data->philo[i++].id, NULL);
 	pthread_join(monitoring, NULL);
-	clean_philo(data);
+	cleanup_philosophers(data);
 }

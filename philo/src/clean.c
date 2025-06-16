@@ -6,13 +6,13 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 17:05:53 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/11 19:39:35 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/16 22:45:11 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	clean_philo(t_data *data)
+void	cleanup_philosophers(t_data *data)
 {
 	int	i;
 

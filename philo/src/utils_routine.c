@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 19:45:32 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/11 20:00:00 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/16 22:37:45 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	print_action(t_philo *philo, char *action)
 	pthread_mutex_unlock(&philo->data->print_lock);
 }
 
-bool	single_philo(t_philo *philo)
+bool	handle_single_philosopher(t_philo *philo)
 {
 	if (philo->data->number_of_philosophers == 1)
 	{

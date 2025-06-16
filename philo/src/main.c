@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:51:20 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/11 19:38:39 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/16 22:46:49 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,5 @@ int	main(int argc, char **argv)
 		printf("Error\n");
 		return (1);
 	}
-	philo_routine(&data);
+	run_philosophers_simulation(&data);
 }
