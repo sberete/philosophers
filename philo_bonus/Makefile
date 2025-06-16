@@ -6,7 +6,7 @@ SRC_DIR = src_bonus
 
 OBJ_DIR = objs_bonus
 
-SRCS = $(shell find $(SRC_DIR) -name '*.c')
+SRCS = $(shell find $(SRC_DIR) -name '*_bonus.c')
 
 OBJS = $(addprefix $(OBJ_DIR)/,$(addsuffix .o,$(notdir $(basename $(SRCS)))))
 
