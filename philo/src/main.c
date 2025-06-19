@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:51:20 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/16 22:46:49 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/19 16:36:20 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,10 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	if (!data_init(&data, argc, argv) || !parsing(data, argc, argv))
+	if (!parsing(argc, argv) || !data_init(&data, argc, argv))
 	{
-		free(data.philo);
+		if (data.philo)
+			free(data.philo);
 		printf("Error\n");
 		return (1);
 	}

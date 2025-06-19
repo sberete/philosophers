@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 19:37:23 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/11 19:42:16 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/19 16:32:49 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,8 @@ bool	data_init(t_data *data, int argc, char **argv)
 	pthread_mutex_init(&data->finish_lock, NULL);
 	data->start_time = actual_time();
 	philo_init(data, argc, argv);
+	if (data->number_of_philosophers > 200 || data->philo->time_to_die < 60
+		|| data->philo->time_to_sleep < 60 || data->philo->time_to_eat < 60)
+		return (false);
 	return (true);
 }

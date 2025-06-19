@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:18:20 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/16 22:47:25 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/19 16:34:11 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,20 +51,17 @@ typedef struct s_data
 	t_philo			*philo;
 }					t_data;
 
-bool				parsing(t_data data, int argc, char **argv);
+bool				parsing(int argc, char **argv);
 bool				data_init(t_data *data, int argc, char **argv);
-
 bool				valid_number(char *str);
 long				ft_atol(char *str);
 long				actual_time(void);
 void				ft_sleep(long ms, t_data *data);
 void				*monitor(void *arg);
 void				*routine(void *arg);
-
 void				run_philosophers_simulation(t_data *data);
 void				print_action(t_philo *philo, char *action);
 bool				handle_single_philosopher(t_philo *philo);
-
 void				cleanup_philosophers(t_data *data);
 
 #endif
