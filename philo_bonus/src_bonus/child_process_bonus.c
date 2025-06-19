@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   child_process_bonus.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/16 23:04:38 by sberete           #+#    #+#             */
+/*   Updated: 2025/06/18 22:53:20 by sberete          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo_bonus.h"
 
 static void	print_action(t_philo *philo, char *action)
@@ -7,37 +19,82 @@ static void	print_action(t_philo *philo, char *action)
 		action);
 	sem_post(philo->data->print_lock);
 }
+
 static void	single_philo(t_philo *philo)
 {
 	sem_wait(philo->data->fork);
 	print_action(philo, "has taken a fork");
 	ft_sleep(philo->time_to_die, philo->data);
 	sem_post(philo->data->fork);
+	print_action(philo, "died");
+	sem_post(philo->data->died);
 	exit(EXIT_SUCCESS);
 }
 
+void *monitor(void *arg)
+{
+    t_philo *philo = (t_philo *)arg;
+    long last_meal_copy;
+
+    while (1)
+    {
+        usleep(1000);
+        pthread_mutex_lock(&philo->meal_mutex);
+        last_meal_copy = philo->last_meal;
+        pthread_mutex_unlock(&philo->meal_mutex);
+        if ((actual_time() - last_meal_copy) > philo->time_to_die)
+        {
+            pthread_mutex_lock(&philo->data->death_mutex);
+            if (!philo->data->someone_died)
+            {
+                philo->data->someone_died = 1;
+                print_action(philo, "died");
+                sem_post(philo->data->died);
+            }
+            pthread_mutex_unlock(&philo->data->death_mutex);
+            break;
+        }
+        pthread_mutex_lock(&philo->meal_mutex);
+        if (philo->must_eat != -1 && philo->meal_eaten >= philo->must_eat)
+        {
+            pthread_mutex_unlock(&philo->meal_mutex);
+            break;
+        }
+        pthread_mutex_unlock(&philo->meal_mutex);
+    }
+    return (NULL);
+}
+
+
 void	child_process(t_philo *philo)
 {
+	pthread_t	death;
+
 	if (philo->data->number_of_philosophers == 1)
 		single_philo(philo);
 	if (philo->name % 2 == 0)
 		usleep(200);
+	pthread_create(&death, NULL, monitor, philo);
+	pthread_detach(death);
 	while (true)
 	{
 		sem_wait(philo->data->fork);
 		print_action(philo, "has taken a fork");
 		sem_wait(philo->data->fork);
 		print_action(philo, "has taken a fork");
+		pthread_mutex_lock(&philo->meal_mutex);
+		philo->last_meal = actual_time();
+		pthread_mutex_unlock(&philo->meal_mutex);
 		print_action(philo, "is eating");
+		pthread_mutex_lock(&philo->meal_mutex);
 		philo->meal_eaten++;
-		// if (philo->must_eat != -1 && philo->meal_eaten == philo->must_eat)
-		// 	philo->data->philos_finished++;
-		// if (philo->data->philos_finished == philo->data->number_of_philosophers)
-		// {
-		// 	sem_post(philo->data->fork);
-		// 	sem_post(philo->data->fork);
-		// 	break ;
-		// }
+		pthread_mutex_unlock(&philo->meal_mutex);
+		if (philo->must_eat != -1 && philo->meal_eaten >= philo->must_eat
+			&& !philo->a)
+		{
+			sem_post(philo->data->finished);
+			philo->a = true;
+		}
 		ft_sleep(philo->time_to_eat, philo->data);
 		sem_post(philo->data->fork);
 		sem_post(philo->data->fork);

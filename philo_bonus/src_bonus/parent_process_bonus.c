@@ -1,16 +1,52 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parent_process_bonus.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/16 23:04:28 by sberete           #+#    #+#             */
+/*   Updated: 2025/06/18 23:02:36 by sberete          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo_bonus.h"
 
-void parent_process(t_data *data)
+void	parent_process(t_data *data)
 {
-    int i;
-    
-    i = 0;
+	int	i;
+
+	if (data->number_of_philosophers == 1)
+		sem_wait(data->died);
+	else if (data->philo->must_eat != -1)
+	{
+		i = 0;
+		while (i < data->number_of_philosophers)
+		{
+			sem_wait(data->finished);
+			i++;
+		}
+	}
+	else
+		sem_wait(data->died);
+	i = 0;
+	while (i < data->number_of_philosophers)
+		kill(data->pids[i++], SIGKILL);
+	i = 0;
 	while (i < data->number_of_philosophers)
 		waitpid(data->pids[i++], NULL, 0);
+	i = 0;
+	while (i < data->number_of_philosophers)
+		pthread_mutex_destroy(&data->philo[i++].meal_mutex);
+	pthread_mutex_destroy(&data->death_mutex);
 	sem_close(data->fork);
 	sem_close(data->print_lock);
+	sem_close(data->died);
+	sem_close(data->finished);
 	sem_unlink("/forks");
 	sem_unlink("/print");
+	sem_unlink("/died");
+	sem_unlink("/philo_finished");
 	free(data->philo);
 	free(data->pids);
 }
