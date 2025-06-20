@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 17:05:53 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/16 22:45:11 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/20 19:57:23 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,15 @@ void	cleanup_philosophers(t_data *data)
 	int	i;
 
 	i = 0;
-	while (i < data->number_of_philosophers)
+	while (i < data->number_of_philo)
 	{
-		pthread_mutex_destroy(&data->philo[i].right_fork);
-		pthread_mutex_destroy(&data->philo[i].meal_eaten_lock);
-		pthread_mutex_destroy(&data->philo[i].last_meal_lock);
+		pthread_mutex_destroy(&data->philo[i].mutex.right_fork);
+		pthread_mutex_destroy(&data->philo[i].mutex.meal_eaten_lock);
+		pthread_mutex_destroy(&data->philo[i].mutex.last_meal_lock);
 		i++;
 	}
-	pthread_mutex_destroy(&data->print_lock);
-	pthread_mutex_destroy(&data->someone_died_lock);
-	pthread_mutex_destroy(&data->finish_lock);
+	pthread_mutex_destroy(&data->mutex.print_lock);
+	pthread_mutex_destroy(&data->mutex.someone_died_lock);
+	pthread_mutex_destroy(&data->mutex.finish_lock);
 	free(data->philo);
 }

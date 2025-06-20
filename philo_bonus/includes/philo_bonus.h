@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 20:42:19 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/18 22:42:07 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/20 19:45:27 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,28 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
+typedef struct s_time
+{
+	int				to_sleep;
+	int				to_eat;
+	int				to_die;
+	int				must_eat;
+}					t_time;
+
+typedef struct s_sem
+{
+	sem_t			*print_lock;
+	sem_t			*fork;
+	sem_t			*died;
+	sem_t			*finished;
+}					t_sem;
+
 typedef struct s_philo
 {
 	pthread_mutex_t	meal_mutex;
-	int				time_to_sleep;
-	int				time_to_eat;
-	int				time_to_die;
+	t_time			time;
 	int				meal_eaten;
 	long			last_meal;
-	int				must_eat;
 	int				name;
 	bool			a;
 	pid_t			pid;
@@ -44,10 +57,7 @@ typedef struct s_philo
 
 typedef struct s_data
 {
-	sem_t			*print_lock;
-	sem_t			*fork;
-	sem_t			*died;
-	sem_t			*finished;
+	t_sem			sem;
 	pthread_mutex_t	death_mutex;
 	int				someone_died;
 	int				number_of_philosophers;

@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:18:20 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/19 16:34:11 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/20 20:15:10 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,29 +22,44 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-typedef struct s_philo
+typedef struct s_time
+{
+	int				to_sleep;
+	int				to_eat;
+	int				to_die;
+	int				must_eat;
+}					t_time;
+
+typedef struct s_philo_mutex
 {
 	pthread_mutex_t	meal_eaten_lock;
 	pthread_mutex_t	last_meal_lock;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	right_fork;
+}					t_philo_mutex;
+
+typedef struct s_philo
+{
+	t_philo_mutex	mutex;
+	t_time			time;
 	pthread_t		id;
-	int				time_to_sleep;
-	int				time_to_eat;
-	int				time_to_die;
 	int				meal_eaten;
 	long			last_meal;
-	int				must_eat;
 	int				name;
 	struct s_data	*data;
 }					t_philo;
 
-typedef struct s_data
+typedef struct s_data_mutex
 {
 	pthread_mutex_t	someone_died_lock;
 	pthread_mutex_t	finish_lock;
 	pthread_mutex_t	print_lock;
-	int				number_of_philosophers;
+}					t_data_mutex;
+
+typedef struct s_data
+{
+	t_data_mutex	mutex;
+	int				number_of_philo;
 	int				philos_finished;
 	bool			someone_died;
 	long			start_time;
@@ -63,5 +78,6 @@ void				run_philosophers_simulation(t_data *data);
 void				print_action(t_philo *philo, char *action);
 bool				handle_single_philosopher(t_philo *philo);
 void				cleanup_philosophers(t_data *data);
+void				error(t_data *data);
 
 #endif
