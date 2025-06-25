@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:18:20 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/20 20:15:10 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/25 16:06:11 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,11 @@ typedef struct s_data_mutex
 typedef struct s_data
 {
 	t_data_mutex	mutex;
+	t_philo			*philo;
 	int				number_of_philo;
 	int				philos_finished;
 	bool			someone_died;
 	long			start_time;
-	t_philo			*philo;
 }					t_data;
 
 bool				parsing(int argc, char **argv);
