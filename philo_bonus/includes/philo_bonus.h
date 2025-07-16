@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 20:42:19 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/20 19:45:27 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/25 17:07:11 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,12 @@ typedef struct s_philo
 
 typedef struct s_data
 {
+	t_philo			*philo;
+	pid_t			*pids;
 	t_sem			sem;
-	pthread_mutex_t	death_mutex;
 	int				someone_died;
 	int				number_of_philosophers;
 	long			start_time;
-	t_philo			*philo;
-	pid_t			*pids;
 }					t_data;
 
 bool				data_init(t_data *data, int argc, char **argv);
@@ -75,5 +74,6 @@ void				child_process(t_philo *philo);
 void				ft_sleep(long ms, t_data *data);
 void				parent_process(t_data *data);
 void				print_error(t_data *data, char *action);
+void				cleanup_philosophers(t_data *data);
 
 #endif

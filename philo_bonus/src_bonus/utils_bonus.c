@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:51:37 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/16 19:12:16 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/23 21:10:23 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ long	actual_time(void)
 	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * 1000L) + (tv.tv_usec / 1000L));
 }
+
 void	ft_sleep(long ms, t_data *data)
 {
 	long	start;
@@ -77,13 +78,6 @@ void	ft_sleep(long ms, t_data *data)
 	start = actual_time();
 	while ((actual_time() - start) < ms)
 	{
-		// pthread_mutex_lock(&data->someone_died_lock);
-		// if (data->someone_died)
-		// {
-		// 	pthread_mutex_unlock(&data->someone_died_lock);
-		// 	break ;
-		// }
-		// pthread_mutex_unlock(&data->someone_died_lock);
 		usleep(100);
 	}
 }

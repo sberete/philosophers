@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 23:04:38 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/20 20:02:40 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/23 21:22:34 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,40 +31,39 @@ static void	single_philo(t_philo *philo)
 	exit(EXIT_SUCCESS);
 }
 
-void *monitor(void *arg)
+void	*monitor(void *arg)
 {
-    t_philo *philo = (t_philo *)arg;
-    long last_meal_copy;
+	t_philo	*philo;
+	long	last_meal_copy;
 
-    while (1)
-    {
-        usleep(1000);
-        pthread_mutex_lock(&philo->meal_mutex);
-        last_meal_copy = philo->last_meal;
-        pthread_mutex_unlock(&philo->meal_mutex);
-        if ((actual_time() - last_meal_copy) > philo->time.to_die)
-        {
-            pthread_mutex_lock(&philo->data->death_mutex);
-            if (!philo->data->someone_died)
-            {
-                philo->data->someone_died = 1;
-                print_action(philo, "died");
-                sem_post(philo->data->sem.died);
-            }
-            pthread_mutex_unlock(&philo->data->death_mutex);
-            break;
-        }
-        pthread_mutex_lock(&philo->meal_mutex);
-        if (philo->time.must_eat != -1 && philo->meal_eaten >= philo->time.must_eat)
-        {
-            pthread_mutex_unlock(&philo->meal_mutex);
-            break;
-        }
-        pthread_mutex_unlock(&philo->meal_mutex);
-    }
-    return (NULL);
+	philo = (t_philo *)arg;
+	while (1)
+	{
+		usleep(1000);
+		pthread_mutex_lock(&philo->meal_mutex);
+		last_meal_copy = philo->last_meal;
+		pthread_mutex_unlock(&philo->meal_mutex);
+		if ((actual_time() - last_meal_copy) > philo->time.to_die)
+		{
+			if (!philo->data->someone_died)
+			{
+				philo->data->someone_died = 1;
+				print_action(philo, "died");
+				sem_post(philo->data->sem.died);
+			}
+			break ;
+		}
+		pthread_mutex_lock(&philo->meal_mutex);
+		if (philo->time.must_eat != -1
+			&& philo->meal_eaten >= philo->time.must_eat)
+		{
+			pthread_mutex_unlock(&philo->meal_mutex);
+			break ;
+		}
+		pthread_mutex_unlock(&philo->meal_mutex);
+	}
+	return (NULL);
 }
-
 
 void	child_process(t_philo *philo)
 {
@@ -89,8 +88,8 @@ void	child_process(t_philo *philo)
 		pthread_mutex_lock(&philo->meal_mutex);
 		philo->meal_eaten++;
 		pthread_mutex_unlock(&philo->meal_mutex);
-		if (philo->time.must_eat != -1 && philo->meal_eaten >= philo->time.must_eat
-			&& !philo->a)
+		if (philo->time.must_eat != -1
+			&& philo->meal_eaten >= philo->time.must_eat && !philo->a)
 		{
 			sem_post(philo->data->sem.finished);
 			philo->a = true;

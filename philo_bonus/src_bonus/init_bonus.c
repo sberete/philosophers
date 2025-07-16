@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 19:37:23 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/20 20:00:26 by sberete          ###   ########.fr       */
+/*   Updated: 2025/06/23 21:22:52 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,9 @@ bool	data_init(t_data *data, int argc, char **argv)
 		return (false);
 	data->pids = malloc(sizeof(pid_t) * data->number_of_philosophers);
 	if (!data->pids)
-	{
-		free(data->philo);
 		return (false);
-	}
 	data->start_time = actual_time();
 	data->someone_died = 0;
-	pthread_mutex_init(&data->death_mutex, NULL);
 	sem_unlink("/forks");
 	sem_unlink("/print");
 	sem_unlink("/died");
@@ -63,7 +59,7 @@ bool	data_init(t_data *data, int argc, char **argv)
 	data->sem.finished = sem_open("/philo_finished", O_CREAT | O_EXCL, 0644, 0);
 	if (data->sem.print_lock == SEM_FAILED || data->sem.fork == SEM_FAILED
 		|| data->sem.died == SEM_FAILED || data->sem.finished == SEM_FAILED)
-		print_error(data, "sem_open failure");
+		return (false);
 	philo_init(data, argc, argv);
 	return (true);
 }
