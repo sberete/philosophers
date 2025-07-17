@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:51:37 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/23 21:10:23 by sberete          ###   ########.fr       */
+/*   Updated: 2025/07/17 20:52:07 by sxrimu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,23 @@ long	actual_time(void)
 	return ((tv.tv_sec * 1000L) + (tv.tv_usec / 1000L));
 }
 
-void	ft_sleep(long ms, t_data *data)
+void	ft_sleep(long ms, t_philo *philo)
 {
 	long	start;
 
-	(void)data;
 	start = actual_time();
 	while ((actual_time() - start) < ms)
 	{
+		// Vérifier si le philosophe est mort
+		pthread_mutex_lock(&philo->meal_mutex);
+		if ((actual_time() - philo->last_meal) > philo->time.to_die)
+		{
+			pthread_mutex_unlock(&philo->meal_mutex);
+			print_action(philo, "died");
+			sem_post(philo->data->sem.died);
+			exit(EXIT_SUCCESS);
+		}
+		pthread_mutex_unlock(&philo->meal_mutex);
 		usleep(100);
 	}
 }

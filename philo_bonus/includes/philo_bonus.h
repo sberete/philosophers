@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 20:42:19 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/25 17:07:11 by sberete          ###   ########.fr       */
+/*   Updated: 2025/07/17 20:51:32 by sxrimu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,14 @@ typedef struct s_data
 	t_philo			*philo;
 	pid_t			*pids;
 	t_sem			sem;
-	int				someone_died;
 	int				number_of_philosophers;
 	long			start_time;
 }					t_data;
+
+typedef struct s_monitor_info {
+	t_data	*data;
+	int		finished_required;
+}	t_monitor_info;
 
 bool				data_init(t_data *data, int argc, char **argv);
 bool				parsing(t_data data, int argc, char **argv);
@@ -71,9 +75,10 @@ long				ft_atol(char *str);
 long				actual_time(void);
 bool				valid_number(char *str);
 void				child_process(t_philo *philo);
-void				ft_sleep(long ms, t_data *data);
+void	ft_sleep(long ms, t_philo *philo);
 void				parent_process(t_data *data);
 void				print_error(t_data *data, char *action);
 void				cleanup_philosophers(t_data *data);
+void	print_action(t_philo *philo, char *action);
 
 #endif
