@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 19:37:23 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/25 16:09:16 by sberete          ###   ########.fr       */
+/*   Updated: 2025/07/18 19:10:26 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ bool	data_init(t_data *data, int argc, char **argv)
 	philo_init(data, argc, argv);
 	if (data->number_of_philo > 200 || data->philo->time.to_die < 60
 		|| data->philo->time.to_sleep < 60 || data->philo->time.to_eat < 60)
+	{
+		cleanup_philosophers(data);
 		return (false);
+	}
 	return (true);
 }

@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "types.h": "c",
-        "philo_bonus.h": "c",
-        "unistd.h": "c"
-    }
-}

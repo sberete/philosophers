@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:18:20 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/25 16:06:11 by sberete          ###   ########.fr       */
+/*   Updated: 2025/07/18 19:01:19 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,5 @@ void				run_philosophers_simulation(t_data *data);
 void				print_action(t_philo *philo, char *action);
 bool				handle_single_philosopher(t_philo *philo);
 void				cleanup_philosophers(t_data *data);
-void				error(t_data *data);
 
 #endif

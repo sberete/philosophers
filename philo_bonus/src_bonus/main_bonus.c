@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 20:41:45 by sberete           #+#    #+#             */
-/*   Updated: 2025/06/23 21:13:16 by sberete          ###   ########.fr       */
+/*   Updated: 2025/07/18 19:16:05 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,11 @@ int	main(int argc, char **argv)
 	t_data	data;
 	int		i;
 
-	if (!data_init(&data, argc, argv) || !parsing(data, argc, argv))
-		print_error(&data, "Error");
+	if ( !parsing(argc, argv) || !data_init(&data, argc, argv))
+	{
+		printf("Error\n");
+		exit(EXIT_FAILURE);
+	}
 	i = 0;
 	while (i < data.number_of_philosophers)
 	{

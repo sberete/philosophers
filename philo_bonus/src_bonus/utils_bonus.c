@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:51:37 by sberete           #+#    #+#             */
-/*   Updated: 2025/07/17 20:52:07 by sxrimu           ###   ########.fr       */
+/*   Updated: 2025/07/18 18:45:24 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ bool	valid_number(char *str)
 
 	i = 0;
 	val = 0;
-	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
-		i++;
 	if (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i] == '-')
@@ -77,7 +75,6 @@ void	ft_sleep(long ms, t_philo *philo)
 	start = actual_time();
 	while ((actual_time() - start) < ms)
 	{
-		// Vérifier si le philosophe est mort
 		pthread_mutex_lock(&philo->meal_mutex);
 		if ((actual_time() - philo->last_meal) > philo->time.to_die)
 		{

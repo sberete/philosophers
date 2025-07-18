@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 19:37:23 by sberete           #+#    #+#             */
-/*   Updated: 2025/07/17 18:38:09 by sxrimu           ###   ########.fr       */
+/*   Updated: 2025/07/18 19:37:40 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ static int	sema_init(t_data *data)
 	data->sem.finished = sem_open("/philo_finished", O_CREAT | O_EXCL, 0644, 0);
 	if (data->sem.print_lock == SEM_FAILED || data->sem.fork == SEM_FAILED
 		|| data->sem.died == SEM_FAILED || data->sem.finished == SEM_FAILED)
+	{
+		cleanup_philosophers(data);
 		return (1);
+	}
 	return (0);
 }
 
@@ -67,5 +70,11 @@ bool	data_init(t_data *data, int argc, char **argv)
 	if (sema_init(data) == 1)
 		return (false);
 	philo_init(data, argc, argv);
+	if (data->number_of_philosophers > 200 || data->philo->time.to_die < 60
+		|| data->philo->time.to_sleep < 60 || data->philo->time.to_eat < 60)
+	{
+		cleanup_philosophers(data);
+		return (false);
+	}
 	return (true);
 }
