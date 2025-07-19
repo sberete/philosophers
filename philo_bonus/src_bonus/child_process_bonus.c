@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child_process_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 23:04:38 by sberete           #+#    #+#             */
-/*   Updated: 2025/07/18 18:57:41 by sberete          ###   ########.fr       */
+/*   Updated: 2025/07/19 12:54:03 by sxrimu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	child_process(t_philo *philo)
 		usleep(100);
 	while (true)
 	{
+		sem_wait(philo->data->sem.active);
 		sem_wait(philo->data->sem.fork);
 		print_action(philo, "has taken a fork");
 		sem_wait(philo->data->sem.fork);
@@ -90,6 +91,7 @@ void	child_process(t_philo *philo)
 		ft_sleep(philo->time.to_eat, philo);
 		sem_post(philo->data->sem.fork);
 		sem_post(philo->data->sem.fork);
+		sem_post(philo->data->sem.active);
 		print_action(philo, "is sleeping");
 		ft_sleep(philo->time.to_sleep, philo);
 		print_action(philo, "is thinking");

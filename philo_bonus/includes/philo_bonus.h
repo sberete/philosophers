@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 20:42:19 by sberete           #+#    #+#             */
-/*   Updated: 2025/07/18 17:24:54 by sberete          ###   ########.fr       */
+/*   Updated: 2025/07/19 12:38:06 by sxrimu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_sem
 	sem_t			*fork;
 	sem_t			*died;
 	sem_t			*finished;
+	sem_t *active;
 }					t_sem;
 
 typedef struct s_philo

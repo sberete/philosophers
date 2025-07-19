@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:06:59 by sberete           #+#    #+#             */
-/*   Updated: 2025/07/18 19:06:25 by sberete          ###   ########.fr       */
+/*   Updated: 2025/07/19 12:39:17 by sxrimu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ void	cleanup_philosophers(t_data *data)
 		sem_close(data->sem.died);
 	if (data->sem.finished != SEM_FAILED)
 		sem_close(data->sem.finished);
+	if (data->sem.active != SEM_FAILED)
+		sem_close(data->sem.active);
+	sem_unlink("/active");
 	sem_unlink("/forks");
 	sem_unlink("/print");
 	sem_unlink("/died");

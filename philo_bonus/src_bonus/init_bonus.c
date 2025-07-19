@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 19:37:23 by sberete           #+#    #+#             */
-/*   Updated: 2025/07/18 19:37:40 by sberete          ###   ########.fr       */
+/*   Updated: 2025/07/19 12:38:57 by sxrimu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,15 @@ static int	sema_init(t_data *data)
 	sem_unlink("/print");
 	sem_unlink("/died");
 	sem_unlink("/philo_finished");
+	sem_unlink("/active");
 	data->sem.fork = sem_open("/forks", O_CREAT | O_EXCL, 0644,
 			data->number_of_philosophers);
 	data->sem.print_lock = sem_open("/print", O_CREAT | O_EXCL, 0644, 1);
 	data->sem.died = sem_open("/died", O_CREAT | O_EXCL, 0644, 0);
 	data->sem.finished = sem_open("/philo_finished", O_CREAT | O_EXCL, 0644, 0);
+	data->sem.active = sem_open("/active", O_CREAT | O_EXCL, 0644, data->number_of_philosophers - 1);
 	if (data->sem.print_lock == SEM_FAILED || data->sem.fork == SEM_FAILED
-		|| data->sem.died == SEM_FAILED || data->sem.finished == SEM_FAILED)
+		|| data->sem.died == SEM_FAILED || data->sem.finished == SEM_FAILED || data->sem.active == SEM_FAILED)
 	{
 		cleanup_philosophers(data);
 		return (1);
