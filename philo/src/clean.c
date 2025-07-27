@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 17:05:53 by sberete           #+#    #+#             */
-/*   Updated: 2025/07/18 19:10:18 by sberete          ###   ########.fr       */
+/*   Updated: 2025/07/27 20:06:27 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,3 @@ void	cleanup_philosophers(t_data *data)
 	pthread_mutex_destroy(&data->mutex.finish_lock);
 	free(data->philo);
 }
-
