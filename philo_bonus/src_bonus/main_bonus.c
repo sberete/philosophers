@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 20:41:45 by sberete           #+#    #+#             */
-/*   Updated: 2025/07/18 19:16:05 by sberete          ###   ########.fr       */
+/*   Updated: 2025/07/19 21:56:32 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	main(int argc, char **argv)
 	t_data	data;
 	int		i;
 
-	if ( !parsing(argc, argv) || !data_init(&data, argc, argv))
+	if (!parsing(argc, argv) || !data_init(&data, argc, argv))
 	{
 		printf("Error\n");
 		exit(EXIT_FAILURE);

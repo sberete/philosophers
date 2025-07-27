@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:51:37 by sberete           #+#    #+#             */
-/*   Updated: 2025/07/18 18:45:24 by sberete          ###   ########.fr       */
+/*   Updated: 2025/07/19 21:57:14 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,12 @@ void	ft_sleep(long ms, t_philo *philo)
 		pthread_mutex_unlock(&philo->meal_mutex);
 		usleep(100);
 	}
+}
+
+void	print_action(t_philo *philo, char *action)
+{
+	sem_wait(philo->data->sem.print_lock);
+	printf("%ld %d %s\n", actual_time() - philo->data->start_time, philo->name,
+		action);
+	sem_post(philo->data->sem.print_lock);
 }

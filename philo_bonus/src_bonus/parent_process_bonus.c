@@ -6,7 +6,7 @@
 /*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 23:04:28 by sberete           #+#    #+#             */
-/*   Updated: 2025/07/18 19:24:07 by sberete          ###   ########.fr       */
+/*   Updated: 2025/07/26 17:14:15 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,12 @@ void	parent_process(t_data *data)
 	info.data = data;
 	info.finished_required = data->number_of_philosophers;
 	pthread_create(&death_thread, NULL, death_monitor, data);
+	pthread_detach(death_thread);
 	if (data->philo->time.must_eat != -1)
+	{
 		pthread_create(&finish_thread, NULL, finish_monitor, &info);
+		pthread_detach(finish_thread);
+	}
 	i = 0;
 	while (i < data->number_of_philosophers)
 	{

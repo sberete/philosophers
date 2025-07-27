@@ -3,22 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   child_process_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sxrimu <sxrimu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sberete <sberete@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 23:04:38 by sberete           #+#    #+#             */
-/*   Updated: 2025/07/19 12:54:03 by sxrimu           ###   ########.fr       */
+/*   Updated: 2025/07/19 21:59:27 by sberete          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
-
-void	print_action(t_philo *philo, char *action)
-{
-	sem_wait(philo->data->sem.print_lock);
-	printf("%ld %d %s\n", actual_time() - philo->data->start_time, philo->name,
-		action);
-	sem_post(philo->data->sem.print_lock);
-}
 
 static void	single_philo(t_philo *philo)
 {
@@ -69,6 +61,14 @@ static void	handle_eating(t_philo *philo)
 	}
 }
 
+static void	holding_forks(t_philo *philo)
+{
+	sem_wait(philo->data->sem.fork);
+	print_action(philo, "has taken a fork");
+	sem_wait(philo->data->sem.fork);
+	print_action(philo, "has taken a fork");
+}
+
 void	child_process(t_philo *philo)
 {
 	pthread_t	monitor;
@@ -83,10 +83,7 @@ void	child_process(t_philo *philo)
 	while (true)
 	{
 		sem_wait(philo->data->sem.active);
-		sem_wait(philo->data->sem.fork);
-		print_action(philo, "has taken a fork");
-		sem_wait(philo->data->sem.fork);
-		print_action(philo, "has taken a fork");
+		holding_forks(philo);
 		handle_eating(philo);
 		ft_sleep(philo->time.to_eat, philo);
 		sem_post(philo->data->sem.fork);
